@@ -18,6 +18,11 @@
  *   and wiring of the building blocks of the processor according to the 
  *   hardware design diagram. It contains very little logic itself.
  */
+ 
+`include "mips_pkg.sv"
+
+import mips_pkg::*; 
+
 module Processor(
     input  clock,
     input  reset,
@@ -37,8 +42,6 @@ module Processor(
     output InstMem_Read,
     output [7:0] IP                     // Pending interrupts (diagnostic)
     );
-
-    `include "MIPS_Parameters.v"
 
 
     /*** MIPS Instruction and Components (ID Stage) ***/
