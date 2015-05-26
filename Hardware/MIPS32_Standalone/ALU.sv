@@ -33,8 +33,10 @@ module ALU(
     output ALU_Stall        // Stalls due to long ALU operations
     );
 
-    `include "MIPS_Parameters.sv"
-    
+    `include "mips_pkg.sv"
+     import mips_pkg::*;
+
+
     /***
      Performance Notes:
      

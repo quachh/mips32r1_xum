@@ -230,6 +230,15 @@ parameter [5:0] Funct_Tne     = 6'b11_0110;
 parameter [5:0] Funct_Xor     = 6'b10_0110;
 
 /* ALU Operations (Implementation) */
+enum logic [4:0] {AluOp_Addu, AluOp_Add, AluOp_And, AluOp_Clo, AluOp_Clz, AluOp_Div,
+AluOp_Divu, AluOp_Madd, AluOp_Maddu, AluOp_Mfhi, AluOp_Mflo, AluOp_Msub,
+AluOp_Msubu, AluOp_Mthi, AluOp_Mtlo, AluOp_Mul, AluOp_Mult, AluOp_Multu, AluOp_Nor,
+AluOp_Or,AluOp_Sll, AluOp_Sllc, AluOp_Sllv, AluOp_Slt, AluOp_Sltu, AluOp_Sra,
+AluOp_Srav, AluOp_Srl, AluOp_Srlv, AluOp_Sub, AluOp_Subu, AluOp_Xor} Op;
+
+
+
+/* ALU Operations (Implementation)
 parameter [4:0] AluOp_Add    = 5'd1;
 parameter [4:0] AluOp_Addu   = 5'd0;
 parameter [4:0] AluOp_And    = 5'd2;
@@ -263,6 +272,7 @@ parameter [4:0] AluOp_Sub    = 5'd29;
 parameter [4:0] AluOp_Subu   = 5'd30;
 parameter [4:0] AluOp_Xor    = 5'd31;
 
+ */
 
 // Movc:10->11, Trap:9->10, TrapCond:8->9, RegDst:7->8
 

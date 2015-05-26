@@ -79,7 +79,9 @@ module CPZero(
     output [7:0] IP                 // Pending Interrupts from Cause register (for diagnostic purposes)
     );
 
-    `include "MIPS_Parameters.sv"
+    `include "mips_pkg.sv"
+    import mips_pkg::*;
+
 
 
     /***

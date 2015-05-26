@@ -38,7 +38,9 @@ module Processor(
     output [7:0] IP                     // Pending interrupts (diagnostic)
     );
 
-    `include "MIPS_Parameters.sv"
+    `include "mips_pkg.sv"
+    import mips_pkg::*;
+
 
 
     /*** MIPS Instruction and Components (ID Stage) ***/

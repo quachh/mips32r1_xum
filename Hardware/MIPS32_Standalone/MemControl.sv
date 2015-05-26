@@ -51,8 +51,10 @@ module MemControl(
     output EXC_AdES                 // Store Exception
     );
     
-    `include "MIPS_Parameters.sv"
-    
+    `include "mips_pkg.sv"
+    import mips_pkg::*;
+
+
     /*** Reverse Endian Mode
          Normal memory accesses in the processor are Big Endian. The endianness can be reversed
          to Little Endian in User Mode only.
