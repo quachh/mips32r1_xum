@@ -67,7 +67,7 @@ module Control(
     output MemtoReg
     );
     
-    `include "MIPS_Parameters.v"
+    `include "MIPS_Parameters.sv"
 
     wire Movc;
     wire Branch, Branch_EQ, Branch_GTZ, Branch_LEZ, Branch_NEQ, Branch_GEZ, Branch_LTZ;
@@ -96,7 +96,8 @@ module Control(
     assign  M_CanErr = DP_Exceptions[0];
     
     // Set the main datapath control signals based on the Op Code
-    always @(*) begin
+    always_comb
+    begin
         if (ID_Stall)
             Datapath <= DP_None;
         else begin
@@ -223,7 +224,8 @@ module Control(
     end
 
     // Set the Hazard Control Signals and Exception Indicators based on the Op Code
-    always @(*) begin
+    always_comb
+    begin
         case (OpCode)
             // R-Type
             Op_Type_R  :
@@ -265,7 +267,7 @@ module Control(
                         Funct_Tltu    : begin DP_Hazards <= HAZ_Tltu;    DP_Exceptions <= EXC_Tltu;    end
                         Funct_Tne     : begin DP_Hazards <= HAZ_Tne;     DP_Exceptions <= EXC_Tne;     end
                         Funct_Xor     : begin DP_Hazards <= HAZ_Xor;     DP_Exceptions <= EXC_Xor;     end
-                        default       : begin DP_Hazards <= 8'hxx;       DP_Exceptions <= 3'bxxx;      end
+                       // default       : begin DP_Hazards <= 9'h1FF;       DP_Exceptions <= 4'b1111;      end
                     endcase
                 end
             // R2-Type
@@ -279,7 +281,7 @@ module Control(
                         Funct_Msub  : begin DP_Hazards <= HAZ_Msub;  DP_Exceptions <= EXC_Msub;  end
                         Funct_Msubu : begin DP_Hazards <= HAZ_Msubu; DP_Exceptions <= EXC_Msubu; end
                         Funct_Mul   : begin DP_Hazards <= HAZ_Mul;   DP_Exceptions <= EXC_Mul;   end
-                        default     : begin DP_Hazards <= 8'hxx;     DP_Exceptions <= 3'bxxx;    end
+                       // default     : begin DP_Hazards <= 8'hxx;     DP_Exceptions <= 3'bxxx;    end
                     endcase
                 end
             // I-Type
@@ -308,7 +310,7 @@ module Control(
                         OpRt_Tlti   : begin DP_Hazards <= HAZ_Tlti;   DP_Exceptions <= EXC_Tlti;   end
                         OpRt_Tltiu  : begin DP_Hazards <= HAZ_Tltiu;  DP_Exceptions <= EXC_Tltiu;  end
                         OpRt_Tnei   : begin DP_Hazards <= HAZ_Tnei;   DP_Exceptions <= EXC_Tnei;   end
-                        default     : begin DP_Hazards <= 8'hxx;      DP_Exceptions <= 3'bxxx;     end
+                       // default     : begin DP_Hazards <= 8'hxx;      DP_Exceptions <= 3'bxxx;     end
                     endcase
                 end                         
             Op_Beq     : begin DP_Hazards <= HAZ_Beq;  DP_Exceptions <= EXC_Beq;  end
@@ -321,8 +323,13 @@ module Control(
                     case (Rs)
                         OpRs_MF   : begin DP_Hazards <= HAZ_Mfc0; DP_Exceptions <= EXC_Mfc0; end
                         OpRs_MT   : begin DP_Hazards <= HAZ_Mtc0; DP_Exceptions <= EXC_Mtc0; end
-                        OpRs_ERET : begin DP_Hazards <= (Funct == Funct_ERET) ? HAZ_Eret : 8'hxx; DP_Exceptions <= EXC_Eret; end
-                        default   : begin DP_Hazards <= 8'hxx;    DP_Exceptions <= 3'bxxx;   end
+                        OpRs_ERET : begin 
+                        	if(Funct == Funct_ERET)
+                        	DP_Hazards <= HAZ_Eret;
+                        	DP_Exceptions <= EXC_Eret;
+                        	end
+                        //OpRs_ERET : begin DP_Hazards <= (Funct == Funct_ERET) ? HAZ_Eret : 8'hxx; DP_Exceptions <= EXC_Eret; end
+                     //   default   : begin DP_Hazards <= 8'hxx;    DP_Exceptions <= 3'bxxx;   end
                     endcase
                 end
             // Memory
@@ -341,12 +348,13 @@ module Control(
             Op_Sw   : begin DP_Hazards <= HAZ_Sw;  DP_Exceptions <= EXC_Sw;  end
             Op_Swl  : begin DP_Hazards <= HAZ_Swl; DP_Exceptions <= EXC_Swl; end
             Op_Swr  : begin DP_Hazards <= HAZ_Swr; DP_Exceptions <= EXC_Swr; end
-            default : begin DP_Hazards <= 8'hxx;   DP_Exceptions <= 3'bxxx;  end
+           // default : begin DP_Hazards <= 8'hxx;   DP_Exceptions <= 3'bxxx;  end
         endcase
     end
 
     // ALU Assignment
-    always @(*) begin
+    always_comb
+    begin
         if (ID_Stall)
             ALUOp <= AluOp_Addu;  // Any Op that doesn't write HILO or cause exceptions
         else begin

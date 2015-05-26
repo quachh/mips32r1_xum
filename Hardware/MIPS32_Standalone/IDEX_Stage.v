@@ -119,7 +119,7 @@ module IDEX_Stage(
     assign EX_Shamt = EX_SignExtImm[10:6];
     assign EX_SignExtImm = (EX_SignExtImm_pre[16]) ? {15'h7fff, EX_SignExtImm_pre[16:0]} : {15'h0000, EX_SignExtImm_pre[16:0]};
     
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         EX_Link           <= (reset) ? 1'b0  : ((EX_Stall) ? EX_Link                                          : ID_Link);
         EX_RegDst         <= (reset) ? 1'b0  : ((EX_Stall) ? EX_RegDst                                        : ID_RegDst);
         EX_ALUSrcImm      <= (reset) ? 1'b0  : ((EX_Stall) ? EX_ALUSrcImm                                     : ID_ALUSrcImm);

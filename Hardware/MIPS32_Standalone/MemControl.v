@@ -51,7 +51,7 @@ module MemControl(
     output EXC_AdES                 // Store Exception
     );
     
-    `include "MIPS_Parameters.v"
+    `include "MIPS_Parameters.sv"
     
     /*** Reverse Endian Mode
          Normal memory accesses in the processor are Big Endian. The endianness can be reversed
@@ -97,11 +97,11 @@ module MemControl(
     reg  LLSC_Atomic;
     wire LLSC_MemWrite_Mask;
     
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         LLSC_Address <= (reset) ? 30'b0 : (MemRead & LLSC) ? Address[31:2] : LLSC_Address;
     end
     
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         if (reset) begin
             LLSC_Atomic <= 1'b0;
         end
@@ -121,7 +121,7 @@ module MemControl(
     wire ReadCondition  = MemRead  & ~(EXC_KernelMem | EXC_Word | EXC_Half);
     
     reg RW_Mask;
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         RW_Mask <= (reset) ? 1'b0 : (((MemWrite | MemRead) & DataMem_Ready) ? 1'b1 : ((~M_Stall & ~IF_Stall) ? 1'b0 : RW_Mask));
     end
     assign M_Stall = ReadEnable | (WriteEnable != 4'b0000) | DataMem_Ready    | M_Exception_Stall;
@@ -135,7 +135,8 @@ module MemControl(
     wire Byte_Access_RR = Half_Access_R & (Address[1] ~^ Address[0]);
     
     // Write-Enable Signals to Memory
-    always @(*) begin
+    always_comb
+    begin
         if (WriteCondition & ~RW_Mask) begin
             if (Byte) begin
                 WriteEnable[3] <= Byte_Access_LL;
@@ -181,7 +182,8 @@ module MemControl(
     assign MWriteData[7:0]   = DataIn[7:0];
     
     // Data Read from Memory
-    always @(*) begin
+    always_comb
+    begin
         if (Byte) begin
             if (Byte_Access_LL) begin
                 DataOut <= (SignExtend & MReadData[31]) ? {24'hFFFFFF, MReadData[31:24]} : {24'h000000, MReadData[31:24]};

@@ -79,7 +79,7 @@ module CPZero(
     output [7:0] IP                 // Pending Interrupts from Cause register (for diagnostic purposes)
     );
 
-    `include "MIPS_Parameters.v"
+    `include "MIPS_Parameters.sv"
 
 
     /***
@@ -147,7 +147,7 @@ module CPZero(
     reg  [3:0] Cause_ExcCode_bits;
 
     reg reset_r;
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         reset_r <= reset;
     end
 
@@ -341,7 +341,8 @@ module CPZero(
 
       
     /*** Software reads of CP0 Registers ***/
-    always @(*) begin
+    always_comb
+    begin
         if (Mfc0 & (Status_CU_0 | KernelMode)) begin
             case (Rd)
                 5'd8  : Reg_Out <= BadVAddr;
@@ -362,7 +363,7 @@ module CPZero(
     end
 
     /*** Cp0 Register Assignments: Non-general exceptions (Reset, Soft Reset, NMI...) ***/
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         if (reset) begin
             Status_BEV <= 1;
             Status_NMI <= 0;
@@ -384,7 +385,7 @@ module CPZero(
     end
     
     /*** Cp0 Register Assignments: All other registers ***/
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         if (reset) begin
             Count         <= 32'b0;
             Compare       <= 32'b0;
@@ -417,7 +418,7 @@ module CPZero(
     end
 
     /*** Cp0 Register Assignments: General Exception and Interrupt Processing ***/
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         if (reset) begin
             Cause_BD <= 0;
             Cause_CE <= 2'b00;
@@ -479,7 +480,8 @@ module CPZero(
 
 
     /*** Program Counter for all Exceptions/Interrupts ***/
-    always @(*) begin
+    always_comb
+    begin
         // Following is redundant since PC has initial value now.
         if (reset) begin
             Exc_PC_Out <= EXC_Vector_Base_Reset;
@@ -508,7 +510,8 @@ module CPZero(
     assign Exc_PC_Sel = reset | (ERET & ~ID_Stall) | IF_Exception_Ready | ID_Exception_Ready | EX_Exception_Ready | M_Exception_Ready;
 
     /*** Cause Register ExcCode Field ***/
-    always @(*) begin
+    always_comb
+    begin
         // Ordered by Pipeline Stage with Interrupts last
         if      (EXC_AdEL) Cause_ExcCode_bits <= 4'h4;     // 00100
         else if (EXC_AdES) Cause_ExcCode_bits <= 4'h5;     // 00101
@@ -520,7 +523,7 @@ module CPZero(
         else if (EXC_CpU)  Cause_ExcCode_bits <= 4'hb;     // 01011
         else if (EXC_AdIF) Cause_ExcCode_bits <= 4'h4;     // 00100
         else if (EXC_Int)  Cause_ExcCode_bits <= 4'h0;     // 00000     // OK that NMI writes this.
-        else               Cause_ExcCode_bits <= 4'bxxxx;
+      //  else               Cause_ExcCode_bits <= 4'bxxxx;
     end
  
 endmodule

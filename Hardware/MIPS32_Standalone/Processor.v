@@ -18,11 +18,6 @@
  *   and wiring of the building blocks of the processor according to the 
  *   hardware design diagram. It contains very little logic itself.
  */
- 
-`include "mips_pkg.sv"
-
-import mips_pkg::*; 
-
 module Processor(
     input  clock,
     input  reset,
@@ -42,6 +37,8 @@ module Processor(
     output InstMem_Read,
     output [7:0] IP                     // Pending interrupts (diagnostic)
     );
+
+    `include "MIPS_Parameters.sv"
 
 
     /*** MIPS Instruction and Components (ID Stage) ***/
@@ -169,7 +166,7 @@ module Processor(
     reg IRead, IReadMask;
     assign InstMem_Address = IF_PCOut[31:2];
     assign DataMem_Address = M_ALUResult[31:2];
-    always @(posedge clock) begin
+    always_ff @(posedge clock) begin
         IRead <= (reset) ? 1'b1 : ~InstMem_Ready;
         IReadMask <= (reset) ? 1'b0 : ((IRead & InstMem_Ready) ? 1'b1 : ((~IF_Stall) ? 1'b0 : IReadMask));
     end
