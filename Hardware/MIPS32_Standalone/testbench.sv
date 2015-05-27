@@ -18,4 +18,6 @@ module testbench();
     Processor p1 (.*, .IP(), .Interrupts(5'b0), .NMI(1'b0));
     mips_mem_bfm mem1(.*);
     clkgen clk1 (.*);
+
+    bind Processor processorAsserts ac1(clock, reset, OpCode, DataMem_Read, DataMem_Write, InstMem_Read);
 endmodule

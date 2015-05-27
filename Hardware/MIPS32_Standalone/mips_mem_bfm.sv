@@ -120,13 +120,17 @@ module mips_mem_bfm
    //write memory out to a file before quitting
   int outfile;
   final begin
+      if (file == 1)
+        $fclose(`MEM_FILENAME);
+        
       outfile = $fopen(`OUT_FILENAME, "w");
       if (outfile == 0)
         $display("\nError: Could not find file %s\n",`OUT_FILENAME);
-      else
+      else begin
         $writememh(`OUT_FILENAME,mips_memory);
+        $fclose(`OUT_FILENAME);
+      end  
   end
-
 
 
 endmodule // memory_pdp

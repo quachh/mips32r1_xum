@@ -20,3 +20,4 @@ TrapDetect.sv
 mips_mem_bfm.sv
 clkgen.sv
 testbench.sv
+processorAsserts.sv
