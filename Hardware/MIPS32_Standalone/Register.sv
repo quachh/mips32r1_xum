@@ -22,9 +22,7 @@ module Register #(parameter WIDTH = 32, INIT = 0)(
     input  [(WIDTH-1):0] D,
     output reg [(WIDTH-1):0] Q
     );
-        
-    initial
-        Q = INIT;
+       
 
     always_ff @(posedge clock) begin
         Q <= (reset) ? INIT : ((enable) ? D : Q);

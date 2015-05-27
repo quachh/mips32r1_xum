@@ -28,19 +28,12 @@ module RegisterFile(
     // Register file of 32 32-bit registers. Register 0 is hardwired to 0s
     reg [31:0] registers [1:31];
 
-    // Initialize all to zero
-    integer i;
-    initial begin
-        for (i=1; i<32; i=i+1) begin
-            registers[i] <= 0;
-        end
-    end
 
     // Sequential (clocked) write.
     // 'WriteReg' is the register index to write. 'RegWrite' is the command.
     always_ff @(posedge clock) begin
         if (reset) begin
-            for (i=1; i<32; i=i+1) begin
+            for (int i=1; i<32; i=i+1) begin
                 registers[i] <= 0;
             end
         end
