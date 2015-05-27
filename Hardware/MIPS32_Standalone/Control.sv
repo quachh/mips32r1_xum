@@ -18,7 +18,6 @@
  *   instruction through each pipeline stage as needed, and constitute
  *   the effective operation of the processor through each pipeline stage.
  */
-  `include "mips_pkg.sv"
 module Control(
     input  ID_Stall,
     input  [5:0] OpCode,
