@@ -18,6 +18,7 @@
  *   and wiring of the building blocks of the processor according to the 
  *   hardware design diagram. It contains very little logic itself.
  */
+ `include "mips_pkg.sv"
 module Processor(
     input  clock,
     input  reset,
@@ -38,7 +39,7 @@ module Processor(
     output [7:0] IP                     // Pending interrupts (diagnostic)
     );
 
-    `include "mips_pkg.sv"
+
     import mips_pkg::*;
 
 

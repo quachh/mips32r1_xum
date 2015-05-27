@@ -18,6 +18,7 @@
  *
  *   Add, Subtract, Multiply, And, Or, Nor, Xor, Shift, Count leading 1s/0s.
  */
+   `include "mips_pkg.sv"
 module ALU(
     input  clock,
     input  reset,
@@ -33,7 +34,7 @@ module ALU(
     output ALU_Stall        // Stalls due to long ALU operations
     );
 
-    `include "mips_pkg.sv"
+ 
      import mips_pkg::*;
 
 

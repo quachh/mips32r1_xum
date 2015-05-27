@@ -22,6 +22,8 @@
  *   and write command to data memory over a 32-bit data bus, where the read command
  *   is one bit and the write command is 4 bits, one for each byte in the 32-bit word.
  */
+`include "mips_pkg.sv"
+
 module MemControl(
     input  clock,
     input  reset,
@@ -51,7 +53,7 @@ module MemControl(
     output EXC_AdES                 // Store Exception
     );
     
-    `include "mips_pkg.sv"
+
     import mips_pkg::*;
 
 

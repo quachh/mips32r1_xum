@@ -20,6 +20,7 @@
  *   not have virtual memory hardware as a part of it. However, the subset of CP0
  *   is MIPS-32-compliant.
  */
+    `include "mips_pkg.sv"
 module CPZero(
     input  clock,
     //-- CP0 Functionality --//
@@ -79,7 +80,6 @@ module CPZero(
     output [7:0] IP                 // Pending Interrupts from Cause register (for diagnostic purposes)
     );
 
-    `include "mips_pkg.sv"
     import mips_pkg::*;
 
 
