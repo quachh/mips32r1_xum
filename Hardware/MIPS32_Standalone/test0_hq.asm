@@ -5,7 +5,7 @@
 
 	.text
 main:
-  lw 	$fp, temp
+  la 	$fp, temp
 	sw	$0,16($fp)
 	sw	$0,20($fp)
 	sw	$0,24($fp)
@@ -69,10 +69,9 @@ $R0:
   nop
   
 	.data
-	.align 2
 result: .word 0xACED	
 temp1: .word 0
 temp2: .word 0
 temp3: .word 0
 temp4: .word 0
-temp: .word 0x1001000
+temp: .word 0
