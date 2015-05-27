@@ -1,26 +1,26 @@
 
-`define MEM_FILENAME "test0_hq.mem"
-`define OUT_FILENAME "out.mem"
 
-module mips_mem_bfm
-  (
-   // Global input
-    input clock,
+
+module mips_mem_bfm (clock, DataMem_In, DataMem_Ready, DataMem_Read, DataMem_Write, DataMem_Address, DataMem_Out, InstMem_In, InstMem_Ready, InstMem_Address, InstMem_Read);
+
+    parameter string MEM_FILENAME = "test.mem";
+    parameter string OUT_FILENAME = "out.mem";
+
+	 // Global input
+    input clock;
     // NOTE: port names are with respected to CPU i.e. : DataMem_In is data going INto CPU
     // Data Memory Interface
-    output  [31:0]    DataMem_In,
-    output            DataMem_Ready,
-    input             DataMem_Read,
-    input   [3:0]     DataMem_Write,        // 4-bit Write, one for each byte in word.
-    input   [29:0]    DataMem_Address,      // Addresses are words, not bytes.
-    input   [31:0]    DataMem_Out,
+    output  [31:0]    DataMem_In;
+    output            DataMem_Ready;
+    input             DataMem_Read;
+    input   [3:0]     DataMem_Write;        // 4-bit Write, one for each byte in word.
+    input   [29:0]    DataMem_Address;      // Addresses are words, not bytes.
+    input   [31:0]    DataMem_Out;
     // Instruction Memory Interface
-    output  [31:0]    InstMem_In,
-    output            InstMem_Ready,
-    input   [29:0]    InstMem_Address,      // Addresses are words, not bytes.
-    input             InstMem_Read
-
-   );
+    output  [31:0]    InstMem_In;
+    output            InstMem_Ready;
+    input   [29:0]    InstMem_Address;      // Addresses are words, not bytes.
+    input             InstMem_Read;
 
     reg [31:0] int_DataMem_In;
     reg [31:0] int_InstMem_In;
@@ -35,7 +35,7 @@ module mips_mem_bfm
         mem_read_32 = mips_memory[addr];
       else
         $display ("no mem found %h ---- %h", addr, mips_memory[addr]);
-        
+
     endfunction: mem_read_32
 
     function automatic void mem_write_32 (ref logic [31:0] mips_memory [bit [29:0]], input bit [29:0] addr, input logic [31:0] data);
@@ -46,11 +46,11 @@ module mips_mem_bfm
     int file;
     // Fill the memory with values taken from a data file
     initial begin
-      file = $fopen(`MEM_FILENAME, "r");
+      file = $fopen(MEM_FILENAME, "r");
       if (file == 0)
-         $display("\nError: Could not find file %s\n",`MEM_FILENAME);
+         $display("\nError: Could not find file %s\n",MEM_FILENAME);
       else
-         $readmemh(`MEM_FILENAME,mips_memory);
+         $readmemh(MEM_FILENAME,mips_memory);
     end
 
     // Display the contents of memory
@@ -108,7 +108,7 @@ module mips_mem_bfm
         int_InstMem_In    <= mem_read_32 (mips_memory, InstMem_Address);
         if (mips_memory.exists(InstMem_Address))
           int_InstMem_Ready <= 1'b1;
-      end 
+      end
 
   end
 
@@ -126,17 +126,17 @@ module mips_mem_bfm
         $display ("MEM TEST FAILED");
       else
          $display ("UNABLE TO DETERMINE ACED/DEAD TEST VIA MEMORY");
-      
+
       if (file == 0)
-        $fclose(`MEM_FILENAME);
-        
-      outfile = $fopen(`OUT_FILENAME, "w");
+        $fclose(MEM_FILENAME);
+
+      outfile = $fopen(OUT_FILENAME, "w");
       if (outfile == 0)
-        $display("\nError: Could not find file %s\n",`OUT_FILENAME);
+        $display("\nError: Could not find file %s\n",OUT_FILENAME);
       else begin
-        $writememh(`OUT_FILENAME,mips_memory);
-        $fclose(`OUT_FILENAME);
-      end  
+        $writememh(OUT_FILENAME,mips_memory);
+        $fclose(OUT_FILENAME);
+      end
   end
 
 

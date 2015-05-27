@@ -1,5 +1,8 @@
 module testbench();
-    wire  clock;
+    parameter string MEM_FILENAME = "test.mem";
+    parameter string OUT_FILENAME = "out.mem";
+
+		wire  clock;
     wire  reset;
     // Data Memory Interface
     wire  [31:0] DataMem_In;
@@ -14,10 +17,8 @@ module testbench();
     wire  InstMem_Ready;
     wire InstMem_Read;
 
-
     Processor p1 (.*, .IP(), .Interrupts(5'b0), .NMI(1'b0));
-    mips_mem_bfm mem1(.*);
-    clkgen clk1 (.*);
 
-    bind Processor processorAsserts ac1(clock, reset, OpCode, DataMem_Read, DataMem_Write, InstMem_Read);
+    mips_mem_bfm #(.MEM_FILENAME(MEM_FILENAME), .OUT_FILENAME(OUT_FILENAME)) mem1 (.*);
+    clkgen clk1 (.*);
 endmodule
