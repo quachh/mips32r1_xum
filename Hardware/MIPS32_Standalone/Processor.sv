@@ -15,10 +15,9 @@
  *
  * Description:
  *   The top-level MIPS32 Processor. This file is mostly the instantiation
- *   and wiring of the building blocks of the processor according to the 
+ *   and wiring of the building blocks of the processor according to the
  *   hardware design diagram. It contains very little logic itself.
  */
- `include "mips_pkg.sv"
 module Processor(
     input  clock,
     input  reset,
@@ -27,7 +26,7 @@ module Processor(
     // Data Memory Interface
     input  [31:0] DataMem_In,
     input  DataMem_Ready,
-    output DataMem_Read, 
+    output DataMem_Read,
     output [3:0]  DataMem_Write,        // 4-bit Write, one for each byte in word.
     output [29:0] DataMem_Address,      // Addresses are words, not bytes.
     output [31:0] DataMem_Out,
@@ -387,7 +386,7 @@ module Processor(
         .in0  (ID_ReadData1_RF),
         .in1  (M_ALUResult),
         .in2  (WB_WriteData),
-        .in3  (32'hxxxxxxxx),
+        .in3  (),
         .out  (ID_ReadData1_End)
     );
 
@@ -530,7 +529,7 @@ module Processor(
         .in0  (EX_Rt),
         .in1  (EX_Rd),
         .in2  (5'b11111),
-        .in3  (5'bxxxxx),
+        .in3  (),
         .out  (EX_RtRd)
     );
 
@@ -638,9 +637,9 @@ module Processor(
         .Left          (M_Left),
         .Right         (M_Right),
         .M_Exception_Stall (M_Exception_Stall),
-        
+
         .IF_Stall (IF_Stall),
-        
+
         .DataOut       (M_MemReadData),
         .MWriteData    (DataMem_Out),
         .WriteEnable   (DataMem_Write),
