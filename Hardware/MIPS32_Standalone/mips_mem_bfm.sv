@@ -1,12 +1,12 @@
 
-`define MEM_FILENAME "add_test.mem"
+`define MEM_FILENAME "test0_hq.mem"
 `define OUT_FILENAME "out.mem"
 
 module mips_mem_bfm
   (
    // Global input
     input clock,
-    // NOTE: port names are with repected to CPU ie : DataMem_In is data going IN to CPU
+    // NOTE: port names are with respected to CPU i.e. : DataMem_In is data going INto CPU
     // Data Memory Interface
     output  [31:0]    DataMem_In,
     output            DataMem_Ready,
@@ -120,7 +120,14 @@ module mips_mem_bfm
    //write memory out to a file before quitting
   int outfile;
   final begin
-      if (file == 1)
+      if (mips_memory[30'h801] === 32'hACED)
+        $display ("MEM TEST PASSED");
+      else if (mips_memory[30'h801] === 32'hDEAD)
+        $display ("MEM TEST FAILED");
+      else
+         $display ("UNABLE TO DETERMINE ACED/DEAD TEST VIA MEMORY");
+      
+      if (file == 0)
         $fclose(`MEM_FILENAME);
         
       outfile = $fopen(`OUT_FILENAME, "w");
@@ -131,6 +138,7 @@ module mips_mem_bfm
         $fclose(`OUT_FILENAME);
       end  
   end
+
 
 
 endmodule // memory_pdp
