@@ -4,7 +4,6 @@ input [5:0] OpCode;
 input [5:0] Funct;
 input DataMem_Read, InstMem_Read;
 input [3:0] DataMem_Write;
-
 p1: assert #0 (!(!reset && OpCode inside {6'h1, 6'hb, [6'h14:6'h17], [6'h1c:6'h1f]}))
   else $error ("invalid opcode %6b", OpCode);
 
@@ -21,7 +20,6 @@ p2:assert property (@(posedge clk) disable iff (reset)  (OpCode===6'h0 |-> Funct
 
 p3: assert property  (reset1)
 	else $error ("outputs were not known (no X or Z) after reset, DataMem_Read = %1b, DataMem_Write = %4b, InstMem_Read= %1b",DataMem_Read, DataMem_Write , InstMem_Read );
-
 
 
 endprogram: processorAsserts

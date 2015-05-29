@@ -1,13 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////////////////////
-// mips_mem_bfm.sv
-// This file model the memory that is connect to the MIPS32 CPU.
-// The model service Data/memory load/read store/write and instruction fetches
-// The model also act as a checker for assembly test by checking the memory location 30'h801 (32'h2004)
-//    for DEAD/ACED value (writen by self check assembly test)
-//
-//  Spring 2015
-//  Author: Hoa Quach
-//////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 module mips_mem_bfm (clock, DataMem_In, DataMem_Ready, DataMem_Read, DataMem_Write, DataMem_Address, DataMem_Out, InstMem_In, InstMem_Ready, InstMem_Address, InstMem_Read);
@@ -51,8 +42,9 @@ module mips_mem_bfm (clock, DataMem_In, DataMem_Ready, DataMem_Read, DataMem_Wri
       mips_memory[addr] = data;
     endfunction: mem_write_32
 
-    // Fill the memory with values taken from a data file
+
     int file;
+    // Fill the memory with values taken from a data file
     initial begin
       file = $fopen(MEM_FILENAME, "r");
       if (file == 0)
