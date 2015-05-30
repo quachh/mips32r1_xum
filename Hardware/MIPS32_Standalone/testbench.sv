@@ -1,5 +1,5 @@
 module testbench();
-    parameter string MEM_FILENAME = "test.mem";
+    parameter string MEM_FILENAME = "doa_new.mem";
     parameter string OUT_FILENAME = "out.mem";
 
 		wire  clock;
