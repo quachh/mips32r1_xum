@@ -37,8 +37,6 @@ module mips_mem_bfm (clock, DataMem_In, DataMem_Ready, DataMem_Read, DataMem_Wri
       mem_read_32 = 32'hxxxx_xxxx;
       if( mips_memory.exists(addr))
         mem_read_32 = mips_memory[addr];
-      else
-        $display ("no mem found %h ---- %h", addr, mips_memory[addr]);
 
     endfunction: mem_read_32
 
@@ -138,11 +136,11 @@ module mips_mem_bfm (clock, DataMem_In, DataMem_Ready, DataMem_Read, DataMem_Wri
 
       if (file == 0)
         $fclose(MEM_FILENAME);
-        
+
       golden_sim = $fopen(GOLDEN_FILENAME, "r");
       if (file == 0)
         $display("\nError: Could not find file %s\n",GOLDEN_FILENAME);
-      else begin 
+      else begin
         $readmemh(GOLDEN_FILENAME,mips_golden);
         foreach (mips_golden[i]) begin
           if (mips_golden[i] ==! mips_memory[i])
