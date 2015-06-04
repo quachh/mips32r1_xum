@@ -4,6 +4,7 @@
 
 module AssertChecks(
 					input clk,
+					input reset,
 					input [5:0] OpCode,
 					input [5:0] Funct,
 					input [4:0] Rs, Rt, Rd,
